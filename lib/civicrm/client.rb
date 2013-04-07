@@ -24,7 +24,7 @@ module CiviCrm
         end
         response = execute(opts)
         body, code = response.body, response.code
-        resp = CiviCrm::XML.decode(body)
+        resp = CiviCrm::XML.parse(body)
         CiviCrm::Resource.build_from(resp, params)
       end
 

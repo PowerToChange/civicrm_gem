@@ -80,12 +80,13 @@ module CiviCrm
       end
 
       def build_from(resp, request_params = {})
+        entity = request_params['entity']
         case resp
         when Array
           resp.map { |values| build_from(values) }
         when Hash
-          if @@registered_resources && @@registered_resources.include?(resp['object'])
-            klass = "CiviCrm::#{resp['object'].classify}".constantize
+          if @@registered_resources && @@registered_resources.include?(entity)
+            klass = "CiviCrm::#{entity.classify}".constantize
           else
             klass = CiviCrm::Resource
           end

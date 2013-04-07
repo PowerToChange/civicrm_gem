@@ -4,7 +4,7 @@ PATH
     civicrm (1.0.0)
       activemodel
       activesupport
-      ox (> 1.9)
+      nokogiri
       rest-client (~> 1.4)
 
 GEM
@@ -24,7 +24,7 @@ GEM
     mocha (0.10.5)
       metaclass (~> 0.0.1)
     multi_json (1.7.2)
-    ox (1.9.4)
+    nokogiri (1.5.9)
     rake (10.0.3)
     rest-client (1.6.7)
       mime-types (>= 1.16)

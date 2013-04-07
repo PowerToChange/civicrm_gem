@@ -3,11 +3,11 @@ require 'active_support/core_ext/module'
 require 'active_support/core_ext/hash'
 require 'active_support/inflector'
 require 'rest-client'
-require 'oj'
+require 'nokogiri'
 
 # utils
 require 'civicrm/client'
-require 'civicrm/json'
+require 'civicrm/xml'
 require 'civicrm/resource'
 require 'civicrm/version'
 require 'civicrm/form'
@@ -23,15 +23,7 @@ require 'civicrm/actions/find'
 require 'civicrm/errors'
 
 # resources
-require 'civicrm/resources/list'
-require 'civicrm/resources/charge'
-require 'civicrm/resources/wallet'
-require 'civicrm/resources/customer'
-require 'civicrm/resources/reward'
-require 'civicrm/resources/coupon'
-require 'civicrm/resources/event'
-require 'civicrm/resources/payout'
-require 'civicrm/resources/log'
+require 'civicrm/resources/contact'
 
 module CiviCrm
   @@api_key = nil

@@ -16,7 +16,7 @@ spec = Gem::Specification.new do |s|
   s.add_dependency('rest-client', '~> 1.4')
   s.add_dependency('activesupport')
   s.add_dependency('activemodel')
-  s.add_dependency('ox', '> 1.9')
+  s.add_dependency('nokogiri')
 
   s.add_development_dependency('rake')
   s.add_development_dependency('rspec')
