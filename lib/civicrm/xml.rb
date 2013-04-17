@@ -8,7 +8,7 @@ module CiviCrm
           hash = {}
           result.children.each do |attribute|
             next unless attribute.is_a?(Nokogiri::XML::Element)
-            hash[attribute.name] = attribute.children[0].text
+            hash[attribute.name] = attribute.children[0].text rescue nil
           end
           hash
         end

@@ -10,7 +10,6 @@ require 'civicrm/client'
 require 'civicrm/xml'
 require 'civicrm/resource'
 require 'civicrm/version'
-require 'civicrm/form'
 
 # actions
 require 'civicrm/actions/list'
@@ -27,24 +26,22 @@ require 'civicrm/resources/contact'
 
 module CiviCrm
   @@api_key = nil
+  @@site_key = nil
   @@api_base = 'https://www.example.org/path/to/civi/codebase'
   @@api_version = 'v3'
   @@user_authenticated = false
-  @@user_key = nil
 
-  mattr_accessor :api_key, :api_base, :api_version
+  mattr_accessor :api_key, :api_base, :api_version, :site_key
 
   def self.api_url(path = '')
-    base = "#{api_base}/civicrm/extern/rest.php?q=civicrm#{path}"
-    base += "&key=#{@@user_key}" if @@user_authenticated
+    base = "#{api_base}/civicrm/extern/rest.php?#{path}"
     base += "&api_key=#{@@api_key}" if @@api_key
+    base += "&key=#{@@site_key}" if @@site_key
     base
   end
 
-  def authenticate(name, password)
-    auth = Client.request(:get, '/login', name: name, password: password)
-    # TODO: add implementation
-    @@user_authenticated = true
-    @@user_key = ''
+  def self.authenticate(name, password)
+    auth = Client.request(:post, 'q=civicrm/login', name: name, pass: password)
+    @@api_key = auth[0]['api_key']
   end
 end

@@ -2,14 +2,14 @@ module CiviCrm
   class Client
     class << self
       def request(method, path, params = {}, headers = {})
-        unless CiviCrm.api_key
-          raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.api_key"
+        unless CiviCrm.site_key
+          raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.site_key"
         end
         headers = {
           :user_agent => "CiviCrm RubyClient/#{CiviCrm::VERSION}"
         }.merge(headers)
+
         opts = {
-          :url => CiviCrm.api_url(path),
           :method => method,
           :timeout => 80,
           :headers => headers
@@ -18,14 +18,15 @@ module CiviCrm
         # build params
         case method.to_s.downcase.to_sym
         when :get, :head, :delete
-          opts[:url] += "?#{stringify_params(params)}" if params.count > 0
+          path += stringify_params(params) if params.count > 0
         else
           opts[:payload] = stringify_params(params)
         end
+        opts[:url] = CiviCrm.api_url(path)
+
         response = execute(opts)
         body, code = response.body, response.code
-        resp = CiviCrm::XML.parse(body)
-        CiviCrm::Resource.build_from(resp, params)
+        CiviCrm::XML.parse(body)
       end
 
       def execute(opts)

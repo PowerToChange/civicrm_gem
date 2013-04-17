@@ -4,7 +4,9 @@
 
 ## Getting started
 
-* CiviCrm.api_key = 'YOUR_API_KEY'
+* CiviCrm.site_key = 'YOUR_SITE_KEY'
+* // More info about site_key:
+* // http://wiki.civicrm.org/confluence/display/CRMDOC43/Managing+Scheduled+Jobs
 * CiviCrm.api_base = 'https://www.example.org/path/to/civi/codebase/'
 * CiviCrm.authenticate('demo', 'demo')
 

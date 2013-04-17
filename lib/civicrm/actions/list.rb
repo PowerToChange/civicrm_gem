@@ -3,8 +3,9 @@ module CiviCrm
     module List
       module ClassMethods
         def all(params = {})
-          response = CiviCrm::Client.request(:get, path, params)
-          Resource.build_from(response)
+          params.merge!('entity' => entity_class_name, 'action' => 'get')
+          response = CiviCrm::Client.request(:get, "", params)
+          Resource.build_from(response, params)
         end
 
         def count

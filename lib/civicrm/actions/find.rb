@@ -3,10 +3,10 @@ module CiviCrm
     module Find
       module ClassMethods
         def find(id)
-          response = CiviCrm::Client.request(:get, "#{path}/#{id}")
-          Resource.build_from(response)
+          params = {'entity' => entity_class_name, 'action' => 'getsingle', 'id' => id}
+          response = CiviCrm::Client.request(:get, "", params)
+          Resource.build_from(response.first, params)
         end
-        alias_method :retrieve, :find
       end
 
       def self.included(base)
