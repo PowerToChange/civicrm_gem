@@ -3,8 +3,9 @@ module CiviCrm
     module Create
       module ClassMethods
         def create(attrs = {})
-          response = CiviCrm::Client.request(:post, path, attrs)
-          response["error"].blank? ? Resource.build_from(response) : response
+          params = {'entity' => entity_class_name, 'action' => 'create'}
+          response = CiviCrm::Client.request(:post, "", params.merge(attrs))
+          Resource.build_from(response.first, params)
         end
       end
 

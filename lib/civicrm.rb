@@ -22,7 +22,7 @@ require 'civicrm/actions/find'
 require 'civicrm/errors'
 
 # resources
-require 'civicrm/resources/contact'
+require 'civicrm/resources/base'
 
 module CiviCrm
   @@api_key = nil

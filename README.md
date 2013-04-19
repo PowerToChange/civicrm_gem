@@ -13,6 +13,8 @@
 ## CiviCrm Objects
 
 * CiviCrm::Contact.all    # get list of contacts
+* CiviCrm::Contact.create(contact_type: 'Organization', organization_name: 'test') # create contact
+* CiviCrm::Contact.find(1).delete      # find and delete
 
 ## Useful links
 
