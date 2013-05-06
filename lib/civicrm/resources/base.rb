@@ -131,4 +131,10 @@ module CiviCrm
   class Setting < BaseResource
     entity :setting
   end
+  class Survey < BaseResource
+    entity :survey
+  end
+  class SurveyRespondant < BaseResource
+    entity :survey_respondant
+  end
 end
