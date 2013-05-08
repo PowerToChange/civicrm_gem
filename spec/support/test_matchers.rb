@@ -5,10 +5,9 @@ RSpec::Matchers.define :be_listable_resource do |expected|
     test_response_hash = send(:"test_#{subject.name.demodulize.underscore}_array")
 
     client.expects(:get).once.returns(test_response(test_response_hash))
-    c = subject.all.data
+    c = subject.all
 
     c.should be_a_kind_of(Array)
-    c[0].should be_a_kind_of(subject)
   end
 end
 RSpec::Matchers.define :be_updatable_resource do |expected|
@@ -16,9 +15,9 @@ RSpec::Matchers.define :be_updatable_resource do |expected|
     client = authorized_civicrm_client
     subject = actual.class
 
-    client.expects(:get).once.returns(test_response(test_customer({name: "foo"})))
-    client.expects(:put).once.returns(test_response(test_customer({name: "bar"})))
-    c = subject.retrieve("resource_id")
+    client.expects(:get).once.returns(test_response(test_contact({name: "foo"})))
+    client.expects(:put).once.returns(test_response(test_contact({name: "bar"})))
+    c = subject.find("resource_id")
     c.name.should == "foo"
     c.name = "bar"
     c.save
@@ -30,9 +29,9 @@ RSpec::Matchers.define :be_deleteable_resource do |expected|
     client = authorized_civicrm_client
     subject = actual.class
 
-    client.expects(:get).once.returns(test_response(test_customer({name: "foo"})))
-    client.expects(:delete).once.returns(test_response(test_customer({name: "bar"})))
-    c = subject.retrieve("resource_id")
+    client.expects(:get).once.returns(test_response(test_contact({name: "foo"})))
+    client.expects(:delete).once.returns(test_response(test_contact({name: "bar"})))
+    c = subject.find("resource_id")
     c.delete
   end
 end

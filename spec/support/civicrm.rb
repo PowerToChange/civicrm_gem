@@ -22,5 +22,6 @@ module CiviCrm
 end
 def authorized_civicrm_client
   CiviCrm.api_key = 'civicrm'
+  CiviCrm.site_key = 'civicrm'
   CiviCrm::Client.mock_rest_client(mock)
 end

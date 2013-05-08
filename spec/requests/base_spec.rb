@@ -9,12 +9,12 @@ describe "API Bindings" do
 
   it "should not fetch from network while creating a new Resource" do
     @client.expects(:get).never
-    CiviCrm::Charge.new(id: "someid")
+    CiviCrm::Contact.new(id: "someid")
   end
 
   it "should add redirect url to resource from location" do
-    @client.expects(:get).once.returns(test_response(test_charge, 200, 'http://example.com'))
-    CiviCrm::Charge.retrieve("someid").redirect == 'http://example.com'
+    @client.expects(:get).once.returns(test_response(test_contact, 200))
+    CiviCrm::Contact.find("someid").redirect == 'http://example.com'
   end
 
   describe "exception handler" do
@@ -53,8 +53,8 @@ describe "API Bindings" do
       expect { @client.execute!({}) }.to raise_error(CiviCrm::Errors::InternalError)
     end
 
-    it "should raise CiviCrm::Errors::Unauthorized if api_key is not provided" do
-      CiviCrm.api_key = nil
+    it "should raise CiviCrm::Errors::Unauthorized if site_key is not provided" do
+      CiviCrm.site_key = nil
       RestClient::Request.stubs(:execute).returns('test')
       expect { @client.request('get', 'test') }.to raise_error(CiviCrm::Errors::Unauthorized)
     end

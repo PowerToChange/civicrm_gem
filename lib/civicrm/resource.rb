@@ -2,6 +2,7 @@ require 'active_model/dirty'
 module CiviCrm
   class Resource
     include ActiveModel::Dirty
+    include Enumerable
     class_attribute :entity_name
 
     def initialize(values = {})

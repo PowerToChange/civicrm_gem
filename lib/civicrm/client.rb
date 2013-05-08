@@ -23,7 +23,6 @@ module CiviCrm
           opts[:payload] = stringify_params(params)
         end
         opts[:url] = CiviCrm.api_url(path)
-        puts opts.inspect
         response = execute(opts)
         body, code = response.body, response.code
         CiviCrm::XML.parse(body)
