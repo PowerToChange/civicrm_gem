@@ -5,7 +5,7 @@ module CiviCrm
       def update(attrs = {})
         params = {'entity' => self.class.entity_class_name, 'action' => 'replace', 'id' => id}
         new_attrs = attributes.merge(attrs)
-        response = CiviCrm::Client.request(:post, "", params.merge(values: new_attrs))
+        response = CiviCrm::Client.request(:post, params.merge(values: new_attrs))
         refresh_from(response.first.to_hash)
       end
 

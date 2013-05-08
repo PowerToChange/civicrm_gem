@@ -7,14 +7,9 @@ describe "API Bindings" do
     @client = authorized_civicrm_client
   end
 
-  it "should not fetch from network while creating a new Resource" do
+  it "should not fetch from network while initializing a new Resource" do
     @client.expects(:get).never
     CiviCrm::Contact.new(id: "someid")
-  end
-
-  it "should add redirect url to resource from location" do
-    @client.expects(:get).once.returns(test_response(test_contact, 200))
-    CiviCrm::Contact.find("someid").redirect == 'http://example.com'
   end
 
   describe "exception handler" do

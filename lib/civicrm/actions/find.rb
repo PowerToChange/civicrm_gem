@@ -4,7 +4,7 @@ module CiviCrm
       module ClassMethods
         def find(id)
           params = {'entity' => entity_class_name, 'action' => 'getsingle', 'id' => id}
-          response = CiviCrm::Client.request(:get, "", params)
+          response = CiviCrm::Client.request(:get, params)
           Resource.build_from(response.first, params)
         end
       end

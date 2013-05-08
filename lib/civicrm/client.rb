@@ -1,13 +1,13 @@
 module CiviCrm
   class Client
     class << self
-      def request(method, path, params = {}, headers = {})
+      def request(method, params = {})
         unless CiviCrm.site_key
           raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.site_key"
         end
         headers = {
           :user_agent => "CiviCrm RubyClient/#{CiviCrm::VERSION}"
-        }.merge(headers)
+        }
 
         opts = {
           :method => method,
@@ -18,7 +18,7 @@ module CiviCrm
         # build params
         case method.to_s.downcase.to_sym
         when :get, :head, :delete
-          path += stringify_params(params) if params.count > 0
+          path = params.count > 0 ? stringify_params(params) : ''
         else
           opts[:payload] = stringify_params(params)
         end

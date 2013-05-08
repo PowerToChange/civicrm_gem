@@ -4,7 +4,7 @@ module CiviCrm
       module ClassMethods
         def all(params = {})
           params.merge!('entity' => entity_class_name, 'action' => 'get')
-          response = CiviCrm::Client.request(:get, "", params)
+          response = CiviCrm::Client.request(:get, params)
           Resource.build_from(response, params)
         end
 
