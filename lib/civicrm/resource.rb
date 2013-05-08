@@ -57,14 +57,6 @@ module CiviCrm
       to_hash[key]
     end
 
-    def path
-      "#{self.class.path}/#{@id}"
-    end
-
-    def action_path(action)
-      "#{path}/#{action}"
-    end
-
     class << self
       def entity(name = nil)
         self.entity_name = name
@@ -72,10 +64,6 @@ module CiviCrm
 
       def entity_class_name
         self.entity_name.to_s.classify
-      end
-
-      def path
-        "/#{self.name.demodulize.tableize}"
       end
 
       def build_from(resp, request_params = {})
