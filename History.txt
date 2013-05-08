@@ -2,3 +2,10 @@
 
 * 1 major enhancement:
   * Initial release
+
+=== 1.1 2013-05-8
+
+* 3 minor enhancements:
+  * Fix gem specs
+  * added CiviCrm::XML.encode method
+  * CiviCrm::Client.request not accepts only 2 params, "path" option is removed

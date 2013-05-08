@@ -1,6 +1,8 @@
 module CiviCrm
   class Client
     class << self
+
+      # Returns parsed class inherited from CiviCrm::Resource
       def request(method, params = {})
         unless CiviCrm.site_key
           raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.site_key"
