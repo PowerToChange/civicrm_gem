@@ -41,7 +41,7 @@ module CiviCrm
   end
 
   def self.authenticate(name, password)
-    auth = Client.request(:post, 'q=civicrm/login', name: name, pass: password)
+    auth = Client.request(:post, q: 'civicrm/login', name: name, pass: password)
     @@api_key = auth[0]['api_key']
   end
 end
