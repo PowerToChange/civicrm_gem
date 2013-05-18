@@ -17,6 +17,9 @@ module CiviCrm
           :headers => headers
         }
 
+        # set to return json response
+        params.merge!({:json => 1})
+
         # build params
         case method.to_s.downcase.to_sym
         when :get, :head, :delete
@@ -27,7 +30,7 @@ module CiviCrm
         opts[:url] = CiviCrm.api_url(path)
         response = execute(opts)
         body, code = response.body, response.code
-        CiviCrm::XML.parse(body)
+        CiviCrm::JSON.parse(body)
       end
 
       def execute(opts)

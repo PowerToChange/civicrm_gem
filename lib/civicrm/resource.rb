@@ -18,10 +18,6 @@ module CiviCrm
       end
     end
 
-    def to_s(*opts)
-      @values.to_json
-    end
-
     def inspect
       id_string = !@id.nil? ? " id=#{@id}" : ""
       "#<#{self.class}:0x#{self.object_id.to_s(16)}#{id_string}> #{attributes}"
@@ -35,14 +31,6 @@ module CiviCrm
       else
         @values[name.to_s] if @values.has_key?(name.to_s)
       end
-    end
-
-    def to_json(*opts)
-      CiviCrm::JSON.encode(@values)
-    end
-
-    def as_json(*opts)
-      @values.as_json(*a)
     end
 
     def to_hash
