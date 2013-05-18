@@ -9,3 +9,11 @@
   * Fix gem specs
   * added CiviCrm::XML.encode method
   * CiviCrm::Client.request not accepts only 2 params, "path" option is removed
+
+=== 1.2 2013-05-18
+
+* 4 minor enhancements:
+  * Replace parsing of XML response with JSON response
+  * Added tests for CiviCrm::JSON
+  * Added sample JSON responses under fixtures for tests (Activity & Contact)
+  * Refactored Contact specs

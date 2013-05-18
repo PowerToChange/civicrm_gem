@@ -1,3 +1,7 @@
+# Mock CiviCrm::Client factory used to test API call expectations
+# (i.e. POST, GET, DELETE, PUT) which stubs the return using 'test_response'
+# in CiviCrm::TestResponses
+
 module CiviCrm
   class Client
     class << self
