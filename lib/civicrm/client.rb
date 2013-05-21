@@ -2,15 +2,20 @@ module CiviCrm
   class Client
     class << self
 
-      # Returns parsed class inherited from CiviCrm::Resource
       def request(method, params = {})
         unless CiviCrm.site_key
           raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.site_key"
         end
-        headers = {
-          :user_agent => "CiviCrm RubyClient/#{CiviCrm::VERSION}"
-        }
+        CiviCrm::JSON.parse(response(build_opts(method,params)))
+      end
 
+      private
+
+      def headers
+        { :user_agent => "CiviCrm RubyClient/#{CiviCrm::VERSION}" }
+      end
+
+      def build_opts(method,params)
         opts = {
           :method => method,
           :timeout => 80,
@@ -28,9 +33,11 @@ module CiviCrm
           opts[:payload] = stringify_params(params)
         end
         opts[:url] = CiviCrm.api_url(path)
-        response = execute(opts)
-        body, code = response.body, response.code
-        CiviCrm::JSON.parse(body)
+        opts
+      end
+
+      def response(opts)
+        execute(opts).body
       end
 
       def execute(opts)

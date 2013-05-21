@@ -5,7 +5,7 @@ module CiviCrm
         def create(attrs = {})
           params = {'entity' => entity_class_name, 'action' => 'create'}
           response = CiviCrm::Client.request(:post, params.merge(attrs))
-          Resource.build_from(response.first, params)
+          Resource.build_from(response, params).first
         end
       end
 
