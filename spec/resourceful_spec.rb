@@ -13,7 +13,34 @@ describe 'resourceful' do
   end
 
   describe '.entity' do
-    TestContact.entity_class_name.should == 'Contact'
+    it 'sets entity_class_name' do
+      TestContact.entity_class_name.should == 'Contact'
+    end
+  end
+
+  describe '.build_from' do
+    subject { CiviCrm::Resource.build_from(response,{'entity' => 'Contact'}) }
+    context 'when response is an Array of hashes' do
+      let(:response) { [{:name => 'Adrian'},{:name => 'Sheldon'}] }
+      it 'returns an Array' do
+        subject.should be_a_kind_of(Array)
+      end
+      it 'returns an Array of resource objects' do
+        subject.first.should be_a_kind_of(CiviCrm::Contact)
+      end
+    end
+    context 'when response is a hash' do
+      let(:response) { {:name => 'Adrian'} }
+      it 'returns a resource object' do
+        subject.should be_a_kind_of(CiviCrm::Contact)
+      end
+    end
+    context 'when response is a string' do
+      let(:response) { "Some string response" }
+      it 'returns a string' do
+        subject.should == "Some string response"
+      end
+    end
   end
 
   describe '.create' do

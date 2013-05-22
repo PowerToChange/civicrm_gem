@@ -1,7 +1,6 @@
 module CiviCrm
   module Actions
     module Update
-      # TODO: this method doesn't work yet
       def update(attrs = {})
         params = {'entity' => self.class.entity_class_name, 'action' => 'update', 'id' => id}
         new_attrs = attributes.merge(attrs)

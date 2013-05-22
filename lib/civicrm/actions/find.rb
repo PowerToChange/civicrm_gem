@@ -12,6 +12,20 @@ module CiviCrm
           build_response(params).first
         end
 
+        alias_method :all, :where
+
+        def count
+          all.count
+        end
+
+        def first
+          all.first
+        end
+
+        def last
+          all.last
+        end
+
         private
 
         def build_response(params)

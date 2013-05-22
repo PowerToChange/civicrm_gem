@@ -1,6 +1,5 @@
 module CiviCrm
   class BaseResource < CiviCrm::Resource
-    include CiviCrm::Actions::List
     include CiviCrm::Actions::Find
     include CiviCrm::Actions::Create
     include CiviCrm::Actions::Update

@@ -6,13 +6,17 @@ module CiviCrm
         unless CiviCrm.site_key
           raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.site_key"
         end
-        CiviCrm::JSON.parse(response(build_opts(method,params)))
+        CiviCrm::JSON.parse(response(method,params))
       end
 
       private
 
       def headers
         { :user_agent => "CiviCrm RubyClient/#{CiviCrm::VERSION}" }
+      end
+
+      def response(method,params)
+        execute(build_opts(method,params)).body
       end
 
       def build_opts(method,params)
@@ -34,10 +38,6 @@ module CiviCrm
         end
         opts[:url] = CiviCrm.api_url(path)
         opts
-      end
-
-      def response(opts)
-        execute(opts).body
       end
 
       def execute(opts)

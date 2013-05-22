@@ -12,7 +12,6 @@ require 'civicrm/resource'
 require 'civicrm/version'
 
 # actions
-require 'civicrm/actions/list'
 require 'civicrm/actions/create'
 require 'civicrm/actions/update'
 require 'civicrm/actions/destroy'

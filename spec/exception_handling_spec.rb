@@ -33,9 +33,4 @@ describe "Exception handling" do
     RestClient::Request.stubs(:execute).raises(exception)
     expect { subject }.to raise_error(CiviCrm::Errors::InternalError)
   end
-
-  it "should raise CiviCrm::Errors::Unauthorized if site_key is not provided" do
-    CiviCrm.site_key = nil
-    expect { client.request('get') }.to raise_error(CiviCrm::Errors::Unauthorized)
-  end
 end
