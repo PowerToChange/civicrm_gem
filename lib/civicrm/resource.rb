@@ -1,14 +1,12 @@
 require 'active_model/dirty'
 module CiviCrm
   class Resource
-    include ActiveModel::Dirty
     class_attribute :entity_name
 
     def initialize(values = {})
       @values = {}
       @id = values['id'] if values['id']
       refresh_from(values)
-      self.class.define_attribute_methods(attributes.keys)
     end
 
     # we will use this method for creating nested resources
@@ -39,10 +37,6 @@ module CiviCrm
 
     def attributes
       to_hash.reject{ |k, v| v.is_a? (CiviCrm::Resource)}
-    end
-
-    def attribute(key)
-      to_hash[key]
     end
 
     class << self
