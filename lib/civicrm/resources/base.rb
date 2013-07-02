@@ -52,6 +52,9 @@ module CiviCrm
   class CustomSearch < BaseResource
     entity :custom_search
   end
+  class CustomSurveyFields < BaseResource
+    entity :custom_survey_fields
+  end
   class CustomValue < BaseResource
     entity :custom_value
   end
@@ -126,6 +129,12 @@ module CiviCrm
   end
   class Profile < BaseResource
     entity :profile
+  end
+  class Relationship < BaseResource
+    entity :relationship
+  end
+  class RelationshipType < BaseResource
+    entity :relationship_type
   end
   class Setting < BaseResource
     entity :setting
