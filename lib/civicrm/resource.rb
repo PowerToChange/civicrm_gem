@@ -45,7 +45,7 @@ module CiviCrm
       end
 
       def entity_class_name
-        self.entity_name.to_s.classify
+        self.entity_name.to_s.camelize
       end
 
       def build_from(resp, request_params = {})
@@ -54,7 +54,7 @@ module CiviCrm
         when Array
           resp.map { |values| build_from(values, request_params) }
         when Hash
-          klass = "CiviCrm::#{entity.classify}".constantize
+          klass = "CiviCrm::#{entity.camelize}".constantize
           resource = klass.new(resp)
           resource
         else
