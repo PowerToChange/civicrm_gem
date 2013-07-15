@@ -4,6 +4,7 @@ module CiviCrm
     include CiviCrm::Actions::Create
     include CiviCrm::Actions::Update
     include CiviCrm::Actions::Destroy
+    include CiviCrm::Associations::Build
   end
 end
 module CiviCrm
@@ -30,6 +31,7 @@ module CiviCrm
   end
   class Contact < BaseResource
     entity :contact
+    has_many :activities, foreign_key: :contact_id
   end
   class ContactType < BaseResource
     entity :contact_type

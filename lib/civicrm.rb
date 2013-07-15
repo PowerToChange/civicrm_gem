@@ -17,6 +17,9 @@ require 'civicrm/actions/update'
 require 'civicrm/actions/destroy'
 require 'civicrm/actions/find'
 
+# associations
+require 'civicrm/associations/build'
+
 # exceptions
 require 'civicrm/errors'
 
