@@ -126,6 +126,12 @@ module CiviCrm
   class Note < BaseResource
     entity :note
   end
+  class OptionGroup < BaseResource
+    entity :option_group
+  end
+  class OptionValue < BaseResource
+    entity :option_value
+  end
   class Phone < BaseResource
     entity :phone
   end
