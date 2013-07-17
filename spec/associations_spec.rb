@@ -7,7 +7,6 @@ end
 class AssociationTestContact < CiviCrm::BaseResource
   entity :contact
   has_many :association_test_activities, foreign_key: :contact_id, class_name: 'AssociationTestActivity'
-  belongs_to :association_test_activity, foreign_key: :contact_id, class_name: 'AssociationTestActivity'
 end
 
 describe 'associations' do
@@ -21,12 +20,6 @@ describe 'associations' do
   describe 'has_many' do
     it 'defines method' do
       AssociationTestContact.new(name: 'Associated').should respond_to(:association_test_activities)
-    end
-  end
-
-  describe 'belongs_to' do
-    it 'defines method' do
-      AssociationTestContact.new(name: 'Associated').should respond_to(:association_test_activity)
     end
   end
 
