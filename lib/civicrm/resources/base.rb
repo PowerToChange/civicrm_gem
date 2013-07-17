@@ -32,6 +32,7 @@ module CiviCrm
   class Contact < BaseResource
     entity :contact
     has_many :activities, foreign_key: :contact_id
+    has_many :notes, foreign_key: :contact_id
   end
   class ContactType < BaseResource
     entity :contact_type
