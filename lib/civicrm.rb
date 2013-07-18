@@ -1,9 +1,11 @@
+require 'active_support/concern'
 require 'active_support/deprecation'
 require 'active_support/core_ext/module'
 require 'active_support/core_ext/hash'
 require 'active_support/inflector'
 require 'rest-client'
 require 'nokogiri'
+require 'active_model'
 
 # utils
 require 'civicrm/client'
@@ -16,6 +18,7 @@ require 'civicrm/actions/create'
 require 'civicrm/actions/update'
 require 'civicrm/actions/destroy'
 require 'civicrm/actions/find'
+require 'civicrm/actions/saveable'
 
 # associations
 require 'civicrm/associations/build'

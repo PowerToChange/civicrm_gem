@@ -1,10 +1,14 @@
 module CiviCrm
   module Actions
     module Update
-      def update(attrs = {})
+      extend ActiveSupport::Concern
+      include ActiveModel::Validations
+
+      def update
+        return false unless self.valid?
+
         params = {'entity' => self.class.entity_class_name, 'action' => 'update', 'id' => id}
-        new_attrs = attributes.merge(attrs)
-        response = CiviCrm::Client.request(:post, params.merge(values: new_attrs))
+        response = CiviCrm::Client.request(:post, params.merge(values: self.attributes))
         refresh_from(response.first)
         self
       end

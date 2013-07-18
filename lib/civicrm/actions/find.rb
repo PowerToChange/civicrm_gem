@@ -30,7 +30,7 @@ module CiviCrm
 
         def build_response(params)
           response = CiviCrm::Client.request(:get, params)
-          Resource.build_from(response, params)
+          self.build_from(response, params)
         end
       end
 

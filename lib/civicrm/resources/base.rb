@@ -1,8 +1,7 @@
 module CiviCrm
   class BaseResource < CiviCrm::Resource
     include CiviCrm::Actions::Find
-    include CiviCrm::Actions::Create
-    include CiviCrm::Actions::Update
+    include CiviCrm::Actions::Saveable
     include CiviCrm::Actions::Destroy
     include CiviCrm::Associations::Build
   end
