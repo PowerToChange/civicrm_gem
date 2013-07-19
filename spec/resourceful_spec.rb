@@ -18,6 +18,13 @@ describe 'resourceful' do
     end
   end
 
+  describe '#initialize' do
+    subject { TestContact.new({id: 123, 'email' => 'test@gmail.com'}) }
+    it 'returns contact instance with attributes' do
+      subject.id.should == 123
+    end
+  end
+
   describe '.build_from' do
     subject { CiviCrm::Resource.build_from(response,{'entity' => 'Contact'}) }
     context 'when response is an Array of hashes' do
