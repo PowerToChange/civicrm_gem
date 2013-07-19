@@ -1,9 +1,11 @@
 require 'active_model/dirty'
+
 module CiviCrm
   class Resource
     class_attribute :entity_name
 
     def initialize(values = {})
+      values = values.with_indifferent_access
       @values = {}
       @id = values['id'] if values['id']
       refresh_from(values)

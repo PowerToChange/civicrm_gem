@@ -8,9 +8,9 @@ module CiviCrm
       def save
         begin
           if self.id.present?
-            response = self.update
+            self.update
           else
-            response = self.class.create(self.attributes)
+            self.class.create(self.attributes)
           end
         rescue => e
           puts e

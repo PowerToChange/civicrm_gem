@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+require 'ostruct'
 class TestContact < CiviCrm::BaseResource
   entity :contact
 end
@@ -26,13 +26,13 @@ describe 'resourceful' do
         subject.should be_a_kind_of(Array)
       end
       it 'returns an Array of resource objects' do
-        subject.first.should be_a_kind_of(CiviCrm::Contact)
+        subject.first.should be_a_kind_of(CiviCrm::Resource)
       end
     end
     context 'when response is a hash' do
       let(:response) { {:name => 'Adrian'} }
       it 'returns a resource object' do
-        subject.should be_a_kind_of(CiviCrm::Contact)
+        subject.should be_a_kind_of(CiviCrm::Resource)
       end
     end
     context 'when response is a string' do
@@ -49,7 +49,7 @@ describe 'resourceful' do
     end
     it 'should return a contact' do
       c = TestContact.create
-      c.should be_a_kind_of(CiviCrm::Contact)
+      c.should be_a_kind_of(TestContact)
     end
   end
 
@@ -97,7 +97,7 @@ describe 'resourceful' do
     end
     it 'should return a contact' do
       c = TestContact.find(1)
-      c.should be_a_kind_of(CiviCrm::Contact)
+      c.should be_a_kind_of(TestContact)
     end
   end
 
@@ -122,6 +122,29 @@ describe 'resourceful' do
     let(:contact) { TestContact.new }
     it 'should respond to update' do
       contact.should respond_to(:update)
+    end
+  end
+
+  describe '#save' do
+    subject { contact.save }
+    context 'when new record' do
+      before do
+        TestContact.stubs(:create).returns(OpenStruct.new(id: 123))
+      end
+      let(:contact) { TestContact.new(email: 'adrian@gmail.com') }
+      it 'should respond to save' do
+        contact.should respond_to(:save)
+      end
+      it 'should return TestContact with id' do
+        subject.id.should_not be_nil
+      end
+    end
+    context 'when existing record' do
+      let(:contact) { TestContact.new(id: 123, email: 'adrian@gmail.com') }
+      it 'should return TestContact with updated email' do
+        contact.email = 'kingkong@gmail.com'
+        subject.email.should == 'kingkong@gmail.com'
+      end
     end
   end
 

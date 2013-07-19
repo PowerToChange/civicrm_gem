@@ -1,5 +1,6 @@
 module CiviCrm
   class BaseResource < CiviCrm::Resource
+    include ActiveModel::Validations
     include CiviCrm::Actions::Find
     include CiviCrm::Actions::Saveable
     include CiviCrm::Actions::Destroy
