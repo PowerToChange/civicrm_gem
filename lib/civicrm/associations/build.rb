@@ -11,7 +11,13 @@ module CiviCrm
 
           define_method association_name do
             unless instance_variable_get("@#{association_name}")
-              instance_variable_set "@#{association_name}", association_class.constantize.where({ id_name => self.id }.merge(params))
+              begin
+                klass = association_class.constantize
+              rescue NameError => e
+                klass = "CiviCrm#{ association_class }".constantize
+              end
+
+              instance_variable_set "@#{association_name}", klass.where({ id_name => self.id }.merge(params))
             end
             instance_variable_get("@#{association_name}")
           end
