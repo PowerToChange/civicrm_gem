@@ -6,7 +6,7 @@ module CiviCrm
       def update
         return false unless self.valid?
 
-        params = {'entity' => self.class.entity_class_name, 'action' => 'update', 'id' => id}
+        params = {'entity' => self.class.entity_class_name, 'action' => 'create'}
         response = CiviCrm::Client.request(:post, params.merge(self.attributes))
         refresh_from(response.first)
         self
