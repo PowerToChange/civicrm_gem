@@ -56,8 +56,6 @@ module CiviCrm
         when Array
           resp.map { |values| build_from(values, request_params) }
         when Hash
-          # puts self
-          # klass = "CiviCrm::#{entity.camelize}".constantize
           resource = self.new(resp)
           resource
         else

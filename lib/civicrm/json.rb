@@ -8,6 +8,8 @@ module CiviCrm
           doc["values"].each_pair do |key, value|
             array << value
           end
+        elsif doc["values"]
+          array = doc["values"]
         else
           array << doc
         end
