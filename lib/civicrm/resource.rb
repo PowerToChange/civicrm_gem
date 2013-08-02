@@ -56,11 +56,26 @@ module CiviCrm
         when Array
           resp.map { |values| build_from(values, request_params) }
         when Hash
-          resource = self.new(resp)
-          resource
+          self.new(build_attributes(resp))
         else
           resp
         end
+      end
+
+      private
+
+      def build_attributes(resp)
+        resp.each do |attribute, value|
+          if value.is_a?(Array)
+            begin
+              attribute_klass = "::#{ attribute.to_s.singularize.camelize }".constantize
+              value.map! { |v| attribute_klass.new(v) }
+            rescue NameError => e
+              puts e
+            end
+          end
+        end
+        resp
       end
     end
   end

@@ -2,33 +2,22 @@ module CiviCrm
   module Actions
     module Find
       module ClassMethods
-        def where(params = {})
-          params.merge!('entity' => entity_class_name, 'action' => 'get')
-          build_response(params)
+
+        def where(params)
+          CiviCrm::Actions::Relation.new(self).where(params)
+        end
+
+        def includes(*args)
+          CiviCrm::Actions::Relation.new(self).includes(*args)
         end
 
         def find(id)
-          params = {'entity' => entity_class_name, 'action' => 'getsingle', 'id' => id, 'rowCount' => 1}
-          build_response(params).first
+          CiviCrm::Actions::Relation.new(self).find(id)
         end
 
-        alias_method :all, :where
-
-        def count
-          all.count
-        end
-
-        def first
-          all.first
-        end
-
-        def last
-          all.last
-        end
-
-        private
-
-        def build_response(params)
+        def build_response(params = {})
+          params.merge!('entity' => self.entity_class_name)
+          params['action'] ||= 'get'
           response = CiviCrm::Client.request(:get, params)
           self.build_from(response, params)
         end

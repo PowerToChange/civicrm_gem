@@ -26,7 +26,7 @@ describe 'resourceful' do
   end
 
   describe '.build_from' do
-    subject { CiviCrm::Resource.build_from(response,{'entity' => 'Contact'}) }
+    subject { CiviCrm::Resource.build_from(response, {'entity' => 'Contact'}) }
     context 'when response is an Array of hashes' do
       let(:response) { [{:name => 'Adrian'},{:name => 'Sheldon'}] }
       it 'returns an Array' do
@@ -48,6 +48,22 @@ describe 'resourceful' do
         subject.should == "Some string response"
       end
     end
+    context 'when has attributes that can be built' do
+      let(:response) do
+        [
+          { :name => 'Adrian' },
+          { :name => 'Sheldon', :test_contacts => [ {:name => 'Batman'}, {:name => 'Darth Vader'} ] }
+        ]
+      end
+      it 'builds the attribute containing buildable entities' do
+        subject.last.test_contacts.should be_present
+      end
+      it 'builds the attribute with the correct class' do
+        subject.last.test_contacts.each do |test_contact|
+          test_contact.should be_a_kind_of(TestContact)
+        end
+      end
+    end
   end
 
   describe '.create' do
@@ -61,39 +77,10 @@ describe 'resourceful' do
   end
 
   context 'listable' do
-    describe '.all' do
-      it 'should respond to all' do
-        TestContact.should respond_to(:all)
-      end
-    end
     context 'enumerable' do
       let(:contacts) { [TestContact.new(:name => 'Adrian'), TestContact.new(:name => 'John')] }
       before do
         TestContact.stubs(:all).returns(contacts)
-      end
-      describe '.count' do
-        it 'should respond to count' do
-          TestContact.should respond_to(:count)
-        end
-        it 'should return a numeric' do
-          TestContact.count.should == 2
-        end
-      end
-      describe '.first' do
-        it 'should respond to first' do
-          TestContact.should respond_to(:first)
-        end
-        it 'should return first test contact object' do
-          TestContact.first.should == contacts.first
-        end
-      end
-      describe '.last' do
-        it 'should respond to last' do
-          TestContact.should respond_to(:last)
-        end
-        it 'should return last test contact object' do
-          TestContact.last.should == contacts.last
-        end
       end
     end
   end
@@ -112,9 +99,17 @@ describe 'resourceful' do
     it 'should respond to where' do
       TestContact.should respond_to(:where)
     end
-    it 'should return an array' do
-      c = TestContact.where
-      c.should be_a_kind_of(Array)
+    it 'should return a relation' do
+      TestContact.where(id: 1).should be_a_kind_of(CiviCrm::Actions::Relation)
+    end
+  end
+
+  describe '.includes' do
+    it 'should respond to includes' do
+      TestContact.should respond_to(:includes)
+    end
+    it 'should return a relation' do
+      TestContact.includes(:notes).should be_a_kind_of(CiviCrm::Actions::Relation)
     end
   end
 

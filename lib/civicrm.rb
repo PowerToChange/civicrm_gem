@@ -16,14 +16,12 @@ require 'civicrm/resource'
 require 'civicrm/version'
 
 # actions
+require 'civicrm/actions/relation'
 require 'civicrm/actions/create'
 require 'civicrm/actions/update'
 require 'civicrm/actions/destroy'
 require 'civicrm/actions/find'
 require 'civicrm/actions/saveable'
-
-# associations
-require 'civicrm/associations/build'
 
 # exceptions
 require 'civicrm/errors'

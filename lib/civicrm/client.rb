@@ -3,31 +3,31 @@ module CiviCrm
     class << self
 
       def request(method, params = {})
-        unless CiviCrm.site_key
-          raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.site_key"
-        end
-        CiviCrm::JSON.parse(response(method,params))
+        raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.site_key" unless CiviCrm.site_key
+        CiviCrm::JSON.parse(response(method, params))
       end
 
       private
 
       def headers
-        { :user_agent => "CiviCrm RubyClient/#{CiviCrm::VERSION}" }
+        { user_agent: "CiviCrm RubyClient/#{CiviCrm::VERSION}" }
       end
 
-      def response(method,params)
-        execute(build_opts(method,params)).body
+      def response(method, params)
+        execute(build_opts(method, params)).body
       end
 
-      def build_opts(method,params)
+      def build_opts(method, params)
         opts = {
-          :method => method,
-          :timeout => 80,
-          :headers => headers
+          method: method,
+          timeout: 80,
+          headers: headers
         }
 
         # set to return json response
-        params.merge!({:json => 1})
+        params.merge!(json: 1)
+
+        params = build_in_json_param(params)
 
         # build params
         case method.to_s.downcase.to_sym
@@ -38,6 +38,27 @@ module CiviCrm
         end
         opts[:url] = CiviCrm.api_url(path)
         opts
+      end
+
+      def build_in_json_param(params)
+        json_hash ||= {}
+
+        # We can "include" entities by chaining the result of the API call into subsequent calls.
+        # E.g. if we make a request for a Contact we can include it's Activities and it's Notes by specifying the json param like this:
+        #   json={"api.Activity.Get":{},"api.Note.Get":{}}
+        params.delete(:includes).try(:each) do |include_entity|
+          json_hash["api.#{ include_entity.to_s.singularize.camelize }.Get"] = {}
+        end
+
+        # We can return multiple entities if we know their ids by specifying the json param like this:
+        #   json={"id":{"in":"1,60047,60048"}}
+        if params[:id].is_a?(Array)
+          ids = params.delete(:id)
+          json_hash[:id] = { "in" => ids.join(',') }
+        end
+
+        params[:json] = json_hash.to_json if json_hash.present?
+        params
       end
 
       def execute(opts)

@@ -26,4 +26,21 @@ describe 'CiviCrm::Client' do
       subject.should == expected_result
     end
   end
+
+  describe '.build_in_json_param' do
+    let(:params) { { :rowCount => 1, :offset => 8990, :includes => [:notes, 'relationships'], :id => [1,2,3] } }
+    subject { CiviCrm::Client.send(:build_in_json_param, params) }
+    it 'should build json param for the includes' do
+      subject[:json].should include('"api.Note.Get":{}', '"api.Relationship.Get":{}')
+    end
+    it 'should build the json param for multiple ids' do
+      subject[:json].should include('"id":{"in":"1,2,3"}')
+    end
+    context 'no includes or multiple ids' do
+      let(:params) { { :rowCount => 1, :offset => 8990 } }
+      it 'should not build a json param' do
+        subject[:json].should be_blank
+      end
+    end
+  end
 end
