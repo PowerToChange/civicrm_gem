@@ -27,6 +27,22 @@ describe 'relation' do
     end
   end
 
+  describe 'method_missing' do
+    subject { relation }
+    it 'should raise exception if array does not define the method' do
+      expect { subject.some_method_that_im_pretty_sure_doesnt_exist }.to raise_error
+    end
+    it 'should build the request and send the method call to array' do
+      subject.compact.should be_a_kind_of(Array)
+      subject.compact.first.should be_a_kind_of(TestContact)
+    end
+    it 'should send blocks too' do
+      subject.each do |test|
+        test.should be_a_kind_of(TestContact)
+      end
+    end
+  end
+
   describe '#initialize' do
     subject { relation.where(id: 1).includes(:notes) }
     it 'returns contact instance with where params' do

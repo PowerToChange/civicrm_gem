@@ -39,6 +39,14 @@ module CiviCrm
         all.size
       end
 
+      def method_missing(name, *opts, &block)
+        if Array.method_defined?(name) && !name.to_s.include?('=')
+          self.all.send(name, *opts, &block)
+        else
+          super
+        end
+      end
+
       private
 
       def build
