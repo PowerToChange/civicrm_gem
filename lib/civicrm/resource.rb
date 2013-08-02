@@ -71,7 +71,6 @@ module CiviCrm
               attribute_klass = "::#{ attribute.to_s.singularize.camelize }".constantize
               value.map! { |v| attribute_klass.new(v) }
             rescue NameError => e
-              puts e
             end
           end
         end
