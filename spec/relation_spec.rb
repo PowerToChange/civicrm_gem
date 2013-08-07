@@ -122,4 +122,14 @@ describe 'relation' do
     end
   end
 
+  describe '.url' do
+    subject { relation.url }
+    it 'should respond to url' do
+      relation.should respond_to(:url)
+    end
+    it 'should return an string' do
+      subject.should be_a_kind_of(String)
+    end
+  end
+
 end

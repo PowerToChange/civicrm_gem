@@ -150,4 +150,12 @@ describe 'resourceful' do
     end
   end
 
+  describe '#build_url' do
+    subject { TestContact.build_url({ lightsaber: 'blue' }) }
+
+    it 'should return a String' do
+      subject.should be_a(String)
+    end
+  end
+
 end

@@ -7,6 +7,10 @@ module CiviCrm
         CiviCrm::JSON.parse(response(method, params))
       end
 
+      def url(method, params = {})
+        RestClient::Request.new(build_opts(method, params)).url
+      end
+
       private
 
       def headers
@@ -17,6 +21,7 @@ module CiviCrm
         execute(build_opts(method, params)).body
       end
 
+
       def build_opts(method, params)
         opts = {
           method: method,
@@ -24,12 +29,16 @@ module CiviCrm
           headers: headers
         }
 
+        # delete blank params
+        params.each { |key, value| params.delete(key) if value.blank? }
+
         # set to return json response
         params.merge!(json: 1)
 
+        # build the json param used for special situations like api chaining
         params = build_in_json_param(params)
 
-        # build params
+        # build remaining params
         case method.to_s.downcase.to_sym
         when :get, :head, :delete
           path = params.count > 0 ? stringify_params(params) : ''
@@ -45,14 +54,14 @@ module CiviCrm
 
         # We can "include" entities by chaining the result of the API call into subsequent calls.
         # E.g. if we make a request for a Contact we can include it's Activities and it's Notes by specifying the json param like this:
-        #   json={"api.Activity.Get":{},"api.Note.Get":{}}
+        #   json={"api.activity.get":{},"api.note.get":{}}
         params.delete(:includes).try(:each) do |include_entity|
-          json_hash["api.#{ include_entity.to_s.singularize.camelize }.Get"] = {}
-        end
+          json_hash["api.#{ include_entity.to_s.singularize }.get"] = {}
+        end if params[:includes].present?
 
         # We can return multiple entities if we know their ids by specifying the json param like this:
         #   json={"id":{"in":"1,60047,60048"}}
-        if params[:id].is_a?(Array)
+        if params[:id].present? && params[:id].is_a?(Array)
           ids = params.delete(:id)
           json_hash[:id] = { "in" => ids.join(',') }
         end

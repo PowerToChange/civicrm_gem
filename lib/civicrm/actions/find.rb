@@ -16,10 +16,21 @@ module CiviCrm
         end
 
         def build_response(params = {})
-          params.merge!('entity' => self.entity_class_name)
-          params['action'] ||= 'get'
+          params = build_params(params)
           response = CiviCrm::Client.request(:get, params)
           self.build_from(response, params)
+        end
+
+        def build_url(params = {})
+          CiviCrm::Client.url(:get, build_params(params))
+        end
+
+        private
+
+        def build_params(params)
+          params.merge!('entity' => self.entity_class_name)
+          params['action'] ||= 'get'
+          params
         end
       end
 

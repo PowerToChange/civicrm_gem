@@ -47,10 +47,18 @@ module CiviCrm
         end
       end
 
+      def url
+        @klass.build_url(build_params)
+      end
+
       private
 
       def build
-        @klass.build_response(where_params.merge(includes: includes_entities))
+        @klass.build_response(build_params)
+      end
+
+      def build_params
+        where_params.merge(includes: includes_entities)
       end
     end
   end
