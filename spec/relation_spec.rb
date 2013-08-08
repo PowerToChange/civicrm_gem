@@ -20,7 +20,7 @@ describe 'relation' do
       subject.where_params.should eq({ id: 1, hat: 'fedora', nazis: false, sidekicks: true })
     end
     it 'should setup the includes_entities' do
-      subject.includes_entities.should eq([:whip, :horse, :holy_grail])
+      subject.includes_entities.should eq(whip: {}, horse: {}, holy_grail: {})
     end
     it 'should overwrite previous param if sent again' do
       subject.where(id: 2).where_params[:id].should eq 2
@@ -49,7 +49,7 @@ describe 'relation' do
       subject.where_params[:id].should == 1
     end
     it 'returns contact instance with includes' do
-      subject.includes_entities.should == [:notes]
+      subject.includes_entities.should == { notes: {} }
     end
   end
 
@@ -67,12 +67,12 @@ describe 'relation' do
   end
 
   describe '.includes' do
-    subject { relation.includes(:whip).includes(:treasure, :artifacts) }
+    subject { relation.includes(:whip, :pistol).includes(:treasure, artifacts: { should: 'be in a museum' }).includes(horse: {}, monkey: {}, 'dog' => { 'name' => 'Indiana' }) }
     it 'should respond to includes' do
       relation.should respond_to(:includes)
     end
     it 'adds the include entities to the relation' do
-      subject.includes_entities.should eq([:whip, :treasure, :artifacts])
+      subject.includes_entities.should eq({ whip: {}, pistol: {}, treasure: {}, artifacts: { should: 'be in a museum' }, horse: {}, monkey: {}, 'dog' => { 'name' => 'Indiana' } })
     end
     it 'returns a relation' do
       subject.should be_a_kind_of(CiviCrm::Actions::Relation)

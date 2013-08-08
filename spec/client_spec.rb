@@ -32,7 +32,7 @@ describe 'CiviCrm::Client' do
   end
 
   describe '.build_in_json_param' do
-    let(:params) { { rowCount: 1, offset: 8990, includes: [:notes, 'relationships'], id: [1,2,3] } }
+    let(:params) { { rowCount: 1, offset: 8990, includes: { notes: {}, 'relationships' => {} }, id: [1,2,3] } }
     subject { CiviCrm::Client.send(:build_in_json_param, params) }
 
     it 'should build json param for the includes' do

@@ -6,7 +6,7 @@ module CiviCrm
       def initialize(klass)
         @klass = klass
         @where_params = {}
-        @includes_entities = []
+        @includes_entities = {}
       end
 
       def where(params)
@@ -17,7 +17,16 @@ module CiviCrm
 
       def includes(*args)
         relation = clone
-        relation.includes_entities += args
+
+        # The args could be symbols or hashes
+        args.each do |arg|
+          if arg.is_a?(Hash)
+            arg.each { |entity, conditions| relation.includes_entities[entity] = conditions }
+          else
+            relation.includes_entities[arg] = {}
+          end
+        end
+
         relation
       end
 
