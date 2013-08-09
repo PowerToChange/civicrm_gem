@@ -17,7 +17,7 @@ module CiviCrm
           hash[key] = "{#{ hash_to_key(value) }}" if value.is_a?(Hash)
         end
 
-        hash.transform_keys { |key| key.to_s.downcase }.sort_by { |key, _| key.to_s }.collect { |p| p.join(':') }.join('-')
+        Hash[hash.map {|k, v| [k.to_s.downcase, v] }].sort_by { |k, _| k.to_s }.collect { |p| p.join(':') }.join('-')
       end
 
     end
