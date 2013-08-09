@@ -20,7 +20,7 @@ module CiviCrm
       private
 
       def authorized?
-        raise CiviCrm::Errors::Unauthorized, 'Please specify CiviCrm.site_key' unless CiviCrm.site_key
+        raise CiviCrm::Errors::Unauthorized, 'Please specify CiviCrm.site_key' unless CiviCrm.site_key.present?
       end
 
       def send_request(method, params)
