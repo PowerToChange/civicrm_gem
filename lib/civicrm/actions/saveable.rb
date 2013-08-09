@@ -1,9 +1,9 @@
 module CiviCrm
   module Actions
     module Saveable
+      extend ActiveSupport::Concern
       include CiviCrm::Actions::Create
       include CiviCrm::Actions::Update
-      extend ActiveSupport::Concern
 
       def save
         begin

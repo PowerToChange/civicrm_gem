@@ -76,6 +76,19 @@ describe 'resourceful' do
     end
   end
 
+  describe '.update' do
+    it 'should respond to update' do
+      TestContact.should respond_to(:update)
+    end
+    it 'should return a contact' do
+      c = TestContact.update(id: 1234)
+      c.should be_a_kind_of(TestContact)
+    end
+    it 'should return false if id is not given' do
+      TestContact.update.should be_false
+    end
+  end
+
   context 'listable' do
     context 'enumerable' do
       let(:contacts) { [TestContact.new(:name => 'Adrian'), TestContact.new(:name => 'John')] }

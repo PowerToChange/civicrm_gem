@@ -11,6 +11,13 @@ module CiviCrm
         refresh_from(response.first)
         self
       end
+
+      module ClassMethods
+        def update(attrs = {})
+          return false unless attrs['id'].present? || attrs[:id].present?
+          self.create(attrs)
+        end
+      end
     end
   end
 end

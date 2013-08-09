@@ -11,7 +11,6 @@ module CiviCrm
           self.build_from(response, params).first
         end
       end
-
     end
   end
 end
