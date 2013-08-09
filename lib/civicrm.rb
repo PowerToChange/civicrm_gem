@@ -8,6 +8,12 @@ require 'active_support/hash_with_indifferent_access'
 require 'rest-client'
 require 'nokogiri'
 require 'active_model'
+require 'dalli'
+
+# cache
+require 'civicrm/cache/helpers'
+require 'civicrm/cache/config'
+require 'civicrm/cache/store'
 
 # utils
 require 'civicrm/client'
@@ -29,7 +35,10 @@ require 'civicrm/errors'
 # resources
 require 'civicrm/resources/base'
 
+
 module CiviCrm
+  extend CiviCrm::Cache::Store
+
   @@api_key = nil
   @@site_key = nil
   @@api_base = 'https://www.example.org/path/to/civi/codebase'

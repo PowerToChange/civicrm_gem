@@ -1,17 +1,31 @@
 module CiviCrm
   class Client
-    class << self
+    extend CiviCrm::Cache::Helpers
 
+    class << self
       def request(method, params = {})
-        raise CiviCrm::Errors::Unauthorized, "Please specify CiviCrm.site_key" unless CiviCrm.site_key
-        CiviCrm::JSON.parse(response(method, params))
+        authorized?
+
+        if CiviCrm.cache_request?(method, params)
+          CiviCrm.cache.store.fetch(request_cache_key(params), request_cache_expires_in(params)) { send_request(method, params) }
+        else
+          send_request(method, params)
+        end
       end
 
       def url(method, params = {})
-        RestClient::Request.new(build_opts(method, params)).url
+        build_opts(method, params)[:url]
       end
 
       private
+
+      def authorized?
+        raise CiviCrm::Errors::Unauthorized, 'Please specify CiviCrm.site_key' unless CiviCrm.site_key
+      end
+
+      def send_request(method, params)
+        CiviCrm::JSON.parse(response(method, params))
+      end
 
       def headers
         { user_agent: "CiviCrm RubyClient/#{CiviCrm::VERSION}" }
@@ -20,7 +34,6 @@ module CiviCrm
       def response(method, params)
         execute(build_opts(method, params)).body
       end
-
 
       def build_opts(method, params)
         opts = {
@@ -103,7 +116,7 @@ module CiviCrm
       end
 
       def stringify_params(params)
-        flatten_params(params).collect{|key, value| "#{key}=#{uri_escape(value)}"}.join('&')
+        flatten_params(params).collect { |key, value| "#{key}=#{uri_escape(value)}" }.join('&')
       end
     end
   end
