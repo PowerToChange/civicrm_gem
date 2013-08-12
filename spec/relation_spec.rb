@@ -17,10 +17,10 @@ describe 'relation' do
   describe 'chaining' do
     subject { relation.where(id: 1).includes(:whip).where(hat: 'fedora').includes(:horse, :holy_grail).where(nazis: false, sidekicks: true) }
     it 'should setup the where_params' do
-      subject.where_params.should eq({ id: 1, hat: 'fedora', nazis: false, sidekicks: true })
+      subject.where_params.should eq({"id"=>1, "hat"=>"fedora", "nazis"=>false, "sidekicks"=>true})
     end
     it 'should setup the includes_entities' do
-      subject.includes_entities.should eq(whip: {}, horse: {}, holy_grail: {})
+      subject.includes_entities.should eq({"whip"=>{}, "horse"=>{}, "holy_grail"=>{}})
     end
     it 'should overwrite previous param if sent again' do
       subject.where(id: 2).where_params[:id].should eq 2
@@ -49,7 +49,7 @@ describe 'relation' do
       subject.where_params[:id].should == 1
     end
     it 'returns contact instance with includes' do
-      subject.includes_entities.should == { notes: {} }
+      subject.includes_entities.should == { "notes" => {} }
     end
   end
 
@@ -59,7 +59,7 @@ describe 'relation' do
       relation.should respond_to(:where)
     end
     it 'adds the where params to the relation' do
-      subject.where_params.should eq({ id: 1, first_name: 'Indiana', last_name: 'Jones' })
+      subject.where_params.should eq({"id"=>1, "first_name"=>"Indiana", "last_name"=>"Jones"})
     end
     it 'returns a relation' do
       subject.should be_a_kind_of(CiviCrm::Actions::Relation)
@@ -72,7 +72,7 @@ describe 'relation' do
       relation.should respond_to(:includes)
     end
     it 'adds the include entities to the relation' do
-      subject.includes_entities.should eq({ whip: {}, pistol: {}, treasure: {}, artifacts: { should: 'be in a museum' }, horse: {}, monkey: {}, 'dog' => { 'name' => 'Indiana' } })
+      subject.includes_entities.should eq({"whip"=>{}, "pistol"=>{}, "treasure"=>{}, "artifacts"=>{"should"=>"be in a museum"}, "horse"=>{}, "monkey"=>{}, "dog"=>{"name"=>"Indiana"}})
     end
     it 'returns a relation' do
       subject.should be_a_kind_of(CiviCrm::Actions::Relation)

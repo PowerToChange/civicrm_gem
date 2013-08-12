@@ -5,8 +5,8 @@ module CiviCrm
 
       def initialize(klass)
         @klass = klass
-        @where_params = {}
-        @includes_entities = {}
+        @where_params = ActiveSupport::HashWithIndifferentAccess.new
+        @includes_entities = ActiveSupport::HashWithIndifferentAccess.new
       end
 
       def where(params)
@@ -36,6 +36,7 @@ module CiviCrm
       end
 
       def all
+        where_params['rowCount'] ||= '10000'
         build
       end
 
