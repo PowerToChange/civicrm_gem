@@ -45,13 +45,17 @@ module CiviCrm
 
     # Do additional initialization on specific types of attributes
     def initialize_attribute(attribute, value)
-      @values[attribute] = case attribute
-      when /time/
-        self.class.initialize_time_attribute(value)
-      when /date/
-        self.class.initialize_date_attribute(value)
+      if value.is_a?(String)
+        @values[attribute] = case attribute
+        when /time/
+          self.class.initialize_time_attribute(value)
+        when /date/
+          self.class.initialize_date_attribute(value)
+        else
+          value
+        end
       else
-        value
+        @values[attribute] = value
       end
     end
 
@@ -94,6 +98,7 @@ module CiviCrm
               attribute_klass = "::#{ attribute.to_s.singularize.camelize }".constantize
               value.map! { |v| attribute_klass.new(v) }
             rescue NameError => e
+              puts e
             end
           end
         end
