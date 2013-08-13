@@ -171,4 +171,65 @@ describe 'resourceful' do
     end
   end
 
+  describe '.initialize_attribute' do
+    subject { TestContact.new.send(:initialize_attribute, attribute, value) }
+
+    context 'time' do
+      let(:attribute) { 'some_date_time_attribute' }
+      let(:value) { '2013-08-12 20:24:40' }
+      it 'should return a time object' do
+        subject.should be_a Time
+      end
+    end
+
+    context 'date' do
+      let(:attribute) { 'some_date_attribute' }
+      let(:value) { '2013-08-12' }
+      it 'should return a date object' do
+        subject.should be_a Date
+      end
+    end
+
+    context 'attribute that does not require initialization' do
+      let(:attribute) { 'hair_style' }
+      let(:value) { 'long and black' }
+      it 'should return the value' do
+        subject.should eq value
+      end
+    end
+  end
+
+  describe 'attributes initializers' do
+    before { CiviCrm.time_zone = ActiveSupport::TimeZone['Mountain Time (US & Canada)'] }
+
+    context '#initialize_time_attribute' do
+      subject { TestContact.initialize_time_attribute('2013-08-12 20:24:40') }
+
+      it 'should return a Time object' do
+        subject.should be_a(Time)
+      end
+      it 'should return the correct time' do
+        subject.hour.should eq 2
+        subject.min.should eq 24
+        subject.sec.should eq 40
+        subject.day.should eq 13
+        subject.year.should eq 2013
+        subject.month.should eq 8
+      end
+    end
+
+    context '#initialize_date_attribute' do
+      subject { TestContact.initialize_date_attribute('2013-08-12') }
+
+      it 'should return a Date object' do
+        subject.should be_a(Date)
+      end
+      it 'should return the correct date' do
+        subject.day.should eq 12
+        subject.year.should eq 2013
+        subject.month.should eq 8
+      end
+    end
+  end
+
 end

@@ -6,7 +6,7 @@ module CiviCrm
 
     def initialize(values = {})
       values = values.with_indifferent_access
-      @values = {}
+      @values = {}.with_indifferent_access
       @id = values['id'] if values['id']
       refresh_from(values)
     end
@@ -14,7 +14,7 @@ module CiviCrm
     # we will use this method for creating nested resources
     def refresh_from(values)
       values.each do |key, value|
-        @values[key] = value
+        initialize_attribute(key, value)
       end
     end
 
@@ -41,6 +41,20 @@ module CiviCrm
       to_hash.reject{ |k, v| v.is_a? (CiviCrm::Resource)}
     end
 
+    private
+
+    # Do additional initialization on specific types of attributes
+    def initialize_attribute(attribute, value)
+      @values[attribute] = case attribute
+      when /time/
+        self.class.initialize_time_attribute(value)
+      when /date/
+        self.class.initialize_date_attribute(value)
+      else
+        value
+      end
+    end
+
     class << self
       def entity(name = nil)
         self.entity_name = name
@@ -60,6 +74,15 @@ module CiviCrm
         else
           resp
         end
+      end
+
+      def initialize_time_attribute(value)
+        return nil unless value.present?
+        CiviCrm.time_zone.parse(value).in_time_zone(Time.zone) # Convert CiviCrm time zone to local time zone
+      end
+
+      def initialize_date_attribute(value)
+        initialize_time_attribute(value).try(:to_date)
       end
 
       private
