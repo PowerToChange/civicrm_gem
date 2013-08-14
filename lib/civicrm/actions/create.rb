@@ -5,9 +5,11 @@ module CiviCrm
 
       module ClassMethods
         def create(attrs = {})
-          return false unless self.new(attrs).valid?
+          new_me = self.new(attrs)
+          return false unless new_me.valid?
+
           params = {'entity' => entity_class_name, 'action' => 'create'}
-          response = CiviCrm::Client.request(:post, params.merge(attrs))
+          response = CiviCrm::Client.request(:post, params.merge(new_me.attributes))
           self.build_from(response, params).first
         end
       end
