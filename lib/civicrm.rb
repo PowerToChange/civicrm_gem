@@ -4,6 +4,7 @@ require 'active_support/core_ext/module'
 require 'active_support/core_ext/hash'
 require 'active_support/inflector'
 require 'active_support/hash_with_indifferent_access'
+require 'active_support/callbacks'
 
 require 'rest-client'
 require 'nokogiri'

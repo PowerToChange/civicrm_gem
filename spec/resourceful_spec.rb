@@ -1,7 +1,13 @@
 require 'spec_helper'
 require 'ostruct'
+
 class TestContact < CiviCrm::BaseResource
   entity :contact
+
+  before_save :call_me_back
+  after_save :call_me_back
+  def call_me_back
+  end
 end
 
 describe 'resourceful' do
@@ -12,7 +18,7 @@ describe 'resourceful' do
     CiviCrm::Client.stubs(:request).returns([{}])
   end
 
-  describe '.entity' do
+  describe 'entity' do
     it 'sets entity_class_name' do
       TestContact.entity_class_name.should == 'Contact'
     end
@@ -25,10 +31,12 @@ describe 'resourceful' do
     end
   end
 
-  describe '.build_from' do
+  describe '::build_from' do
     subject { CiviCrm::Resource.build_from(response, {'entity' => 'Contact'}) }
+
     context 'when response is an Array of hashes' do
       let(:response) { [{:name => 'Adrian'},{:name => 'Sheldon'}] }
+
       it 'returns an Array' do
         subject.should be_a_kind_of(Array)
       end
@@ -36,18 +44,23 @@ describe 'resourceful' do
         subject.first.should be_a_kind_of(CiviCrm::Resource)
       end
     end
+
     context 'when response is a hash' do
       let(:response) { {:name => 'Adrian'} }
+
       it 'returns a resource object' do
         subject.should be_a_kind_of(CiviCrm::Resource)
       end
     end
+
     context 'when response is a string' do
       let(:response) { "Some string response" }
+
       it 'returns a string' do
         subject.should == "Some string response"
       end
     end
+
     context 'when has attributes that can be built' do
       let(:response) do
         [
@@ -55,6 +68,7 @@ describe 'resourceful' do
           { :name => 'Sheldon', :test_contacts => [ {:name => 'Batman'}, {:name => 'Darth Vader'} ] }
         ]
       end
+
       it 'builds the attribute containing buildable entities' do
         subject.last.test_contacts.should be_present
       end
@@ -66,7 +80,7 @@ describe 'resourceful' do
     end
   end
 
-  describe '.create' do
+  describe '::create' do
     it 'should respond to create' do
       TestContact.should respond_to(:create)
     end
@@ -76,7 +90,7 @@ describe 'resourceful' do
     end
   end
 
-  describe '.update' do
+  describe '::update' do
     it 'should respond to update' do
       TestContact.should respond_to(:update)
     end
@@ -98,7 +112,7 @@ describe 'resourceful' do
     end
   end
 
-  describe '.find' do
+  describe '::find' do
     it 'should respond to find' do
       TestContact.should respond_to(:find)
     end
@@ -108,7 +122,7 @@ describe 'resourceful' do
     end
   end
 
-  describe '.where' do
+  describe '::where' do
     it 'should respond to where' do
       TestContact.should respond_to(:where)
     end
@@ -117,7 +131,7 @@ describe 'resourceful' do
     end
   end
 
-  describe '.includes' do
+  describe '::includes' do
     it 'should respond to includes' do
       TestContact.should respond_to(:includes)
     end
@@ -142,11 +156,13 @@ describe 'resourceful' do
 
   describe '#save' do
     subject { contact.save }
+
     context 'when new record' do
       before do
         TestContact.stubs(:create).returns(OpenStruct.new(id: 123))
       end
       let(:contact) { TestContact.new(email: 'adrian@gmail.com') }
+
       it 'should respond to save' do
         contact.should respond_to(:save)
       end
@@ -154,11 +170,21 @@ describe 'resourceful' do
         subject.id.should_not be_nil
       end
     end
+
     context 'when existing record' do
       let(:contact) { TestContact.new(id: 123, email: 'adrian@gmail.com') }
       it 'should return TestContact with updated email' do
         contact.email = 'kingkong@gmail.com'
         subject.email.should == 'kingkong@gmail.com'
+      end
+    end
+
+    describe 'callbacks' do
+      let(:contact) { TestContact.new(id: 123, email: 'adrian@gmail.com') }
+
+      it 'should call before and after callbacks' do
+        TestContact.any_instance.expects(:call_me_back).twice
+        subject
       end
     end
   end
@@ -171,7 +197,7 @@ describe 'resourceful' do
     end
   end
 
-  describe '.initialize_attribute' do
+  describe '#initialize_attribute' do
     subject { TestContact.new.send(:initialize_attribute, attribute, value) }
 
     context 'time' do
