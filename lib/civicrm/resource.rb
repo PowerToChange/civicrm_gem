@@ -7,7 +7,6 @@ module CiviCrm
     def initialize(values = {})
       values = values.with_indifferent_access
       @values = {}.with_indifferent_access
-      @id = values['id'] if values['id']
       refresh_from(values)
     end
 
@@ -16,11 +15,7 @@ module CiviCrm
       values.each do |key, value|
         initialize_attribute(key, value)
       end
-    end
-
-    def inspect
-      id_string = !@id.nil? ? " id=#{@id}" : ""
-      "#<#{self.class}:0x#{self.object_id.to_s(16)}#{id_string}> #{attributes}"
+      self
     end
 
     def method_missing(name, *opts)
@@ -94,15 +89,20 @@ module CiviCrm
       def build_attributes(resp)
         resp.each do |attribute, value|
           if value.is_a?(Array)
-            begin
-              attribute_klass = "::#{ attribute.to_s.singularize.camelize }".constantize
-              value.map! { |v| attribute_klass.new(v) }
-            rescue NameError => e
-              puts e
-            end
+            attribute_class_name = "::#{ attribute.to_s.singularize.camelize }"
+            attribute_class_name = "CiviCrm#{ attribute_class_name }" unless class_exists?(attribute_class_name)
+            value.map! { |v| attribute_class_name.constantize.new(v) } if class_exists?(attribute_class_name)
           end
         end
         resp
+      end
+
+      def class_exists?(class_name)
+        class_name.constantize
+      rescue NameError => e
+        return false
+      else
+        return true
       end
     end
   end

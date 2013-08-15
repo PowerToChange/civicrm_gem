@@ -14,10 +14,12 @@ module CiviCrm
       def save
         begin
           run_callbacks :save do
-            if self.id.present?
+            if self.persisted?
               self.update
             else
-              self.class.create(self.attributes)
+              creation = self.class.create(self.attributes)
+              return creation if creation.blank? # return the result of create if it failed
+              self.refresh_from(creation.attributes) # refresh the current instance from the result of creation
             end
           end
         rescue => e

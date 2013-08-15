@@ -31,6 +31,20 @@ describe 'resourceful' do
     end
   end
 
+  describe '#refresh_from' do
+    let(:contact) { TestContact.new({id: 123, 'email' => 'test@gmail.com'}) }
+    let(:params) { { id: 321, email: 'test@ballistiq.com' } }
+    subject { contact.refresh_from(params) }
+
+    it 'should update the attributes' do
+      subject.email.should eq 'test@ballistiq.com'
+      subject.id.should eq 321
+    end
+    it 'should return self' do
+      subject.should be_a TestContact
+    end
+  end
+
   describe '::build_from' do
     subject { CiviCrm::Resource.build_from(response, {'entity' => 'Contact'}) }
 
@@ -140,6 +154,32 @@ describe 'resourceful' do
     end
   end
 
+  describe '#persisted?' do
+    subject { TestContact.new(params) }
+    let(:params) { { first_name: 'Dude' } }
+
+    it 'should respond to persisted?' do
+      subject.should respond_to(:persisted?)
+    end
+    it 'should not be persisted if is a new record' do
+      subject.persisted?.should be_false
+    end
+
+    context 'has id' do
+      let(:params) { { id: 485329 } }
+      it 'should be persisted if has id' do
+        subject.persisted?.should be_true
+      end
+    end
+
+    context 'does not have id' do
+      let(:params) { { id: nil } }
+      it 'should not be persisted if does not have id' do
+        subject.persisted?.should be_false
+      end
+    end
+  end
+
   describe '#delete' do
     let(:contact) { TestContact.new }
     it 'should respond to delete' do
@@ -159,7 +199,7 @@ describe 'resourceful' do
 
     context 'when new record' do
       before do
-        TestContact.stubs(:create).returns(OpenStruct.new(id: 123))
+        TestContact.stubs(:create).returns(TestContact.new(id: 123))
       end
       let(:contact) { TestContact.new(email: 'adrian@gmail.com') }
 

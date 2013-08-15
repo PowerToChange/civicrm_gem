@@ -4,8 +4,13 @@ module CiviCrm
     include CiviCrm::Actions::Find
     include CiviCrm::Actions::Saveable
     include CiviCrm::Actions::Destroy
+
+    def persisted?
+      id.present?
+    end
   end
 end
+
 module CiviCrm
   class Activity < BaseResource
     entity :activity
