@@ -68,11 +68,10 @@ module CiviCrm
         # We can "include" entities by chaining the result of the API call into subsequent calls.
         # E.g. if we make a request for a Contact we can include it's Activities and it's Notes by specifying the json param like this:
         #   json={"api.activity.get":{},"api.note.get":{}}
-        if params[:includes].respond_to?(:each)
-          params.delete(:includes).each do |entity, conditions|
-            json_hash["api.#{ entity.to_s.singularize }.get"] = conditions
-          end
-        end
+        includes = params.delete(:includes)
+        includes.each do |entity, conditions|
+          json_hash["api.#{ entity.to_s.singularize }.get"] = conditions
+        end if includes.respond_to?(:each)
 
         # We can return multiple entities if we know their ids by specifying the json param like this:
         #   json={"id":{"in":"1,60047,60048"}}
