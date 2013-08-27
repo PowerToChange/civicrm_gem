@@ -46,8 +46,9 @@ module CiviCrm
   @@api_version = 'v3'
   @@user_authenticated = false
   @@time_zone = ActiveSupport::TimeZone['UTC']
+  @@default_row_count = 100
 
-  mattr_accessor :api_key, :api_base, :api_version, :site_key, :time_zone
+  mattr_accessor :api_key, :api_base, :api_version, :site_key, :time_zone, :default_row_count
 
   def self.api_url(path = '')
     base = "#{api_base}/civicrm/extern/rest.php?#{path}"

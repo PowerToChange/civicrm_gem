@@ -36,7 +36,7 @@ module CiviCrm
       end
 
       def all
-        where_params['rowCount'] ||= '10000'
+        where_params['rowCount'] ||= CiviCrm.default_row_count
         build
       end
 
