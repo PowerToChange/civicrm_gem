@@ -69,7 +69,7 @@ module CiviCrm
         when Array
           resp.map { |values| build_from(values, request_params) }
         when Hash
-          self.new(build_attributes(resp))
+          self.new(build_attributes(resp, request_params))
         else
           resp
         end
@@ -86,12 +86,14 @@ module CiviCrm
 
       private
 
-      def build_attributes(resp)
+      def build_attributes(resp, request_params = {})
         resp.each do |attribute, value|
           if value.is_a?(Array)
             attribute_class_name = "::#{ attribute.to_s.singularize.camelize }"
             attribute_class_name = "CiviCrm#{ attribute_class_name }" unless class_exists?(attribute_class_name)
-            value.map! { |v| attribute_class_name.constantize.new(v) } if class_exists?(attribute_class_name)
+            if class_exists?(attribute_class_name)
+              value.map! { |v| attribute_class_name.constantize.build_from(v) }
+            end
           end
         end
         resp
