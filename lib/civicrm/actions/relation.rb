@@ -35,8 +35,8 @@ module CiviCrm
         self.first
       end
 
-      def all
-        where_params['rowCount'] ||= CiviCrm.default_row_count
+      def all(row_count = CiviCrm.default_row_count)
+        where_params['rowCount'] ||= row_count
         build
       end
 
