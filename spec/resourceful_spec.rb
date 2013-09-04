@@ -180,10 +180,23 @@ describe 'resourceful' do
     end
   end
 
-  describe '#delete' do
-    let(:contact) { TestContact.new }
-    it 'should respond to delete' do
-      contact.should respond_to(:delete)
+  describe 'delete' do
+    let(:contact) { TestContact.new(id: 35433) }
+    before { CiviCrm::Client.expects(:request).with(:post, 'id' => contact.id, 'entity' => 'Contact', 'action' => 'delete').returns([{ is_error: 0 }]) }
+
+    context '::delete' do
+      it 'should make delete request to client' do
+        TestContact.delete('id' => contact.id)
+      end
+    end
+
+    context '#delete' do
+      it 'should make delete request to client' do
+        contact.delete
+      end
+      it 'should return true for success' do
+        contact.delete.should be_true
+      end
     end
   end
 

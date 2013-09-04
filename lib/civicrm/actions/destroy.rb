@@ -1,11 +1,23 @@
 module CiviCrm
   module Actions
     module Destroy
+
       def delete
-        params = {'entity' => self.class.entity_class_name, 'action' => 'delete', 'id' => id}
-        response = CiviCrm::Client.request(:post, params)
-        response[:is_error] == 0
+        self.class.delete({'id' => id})
       end
+
+      module ClassMethods
+        def delete(params)
+          params.merge!({'entity' => self.entity_class_name, 'action' => 'delete'})
+          response = CiviCrm::Client.request(:post, params)
+          response.try(:first).try(:[], :is_error).present? && response.first[:is_error].to_i == 0
+        end
+      end
+
+      def self.included(base)
+        base.extend(ClassMethods)
+      end
+
     end
   end
 end
