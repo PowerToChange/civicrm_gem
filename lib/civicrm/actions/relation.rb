@@ -37,7 +37,6 @@ module CiviCrm
 
       def all(row_count = CiviCrm.default_row_count)
         where_params['rowCount'] ||= row_count
-        where_params.delete('rowCount') if where_params['id'].present?
         build
       end
 
