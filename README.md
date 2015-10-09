@@ -1,3 +1,7 @@
+# CiviCrm Gem
+
+:warning: This gem is no longer maintained, you are welcome to fork and continue development!
+
 ## Installation
 
 ```
